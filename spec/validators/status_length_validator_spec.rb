@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe StatusLengthValidator do
   describe '#validate' do
-    before { stub_const("#{described_class}::MAX_CHARS", 500) } # Example values below are relative to this baseline
+    before { stub_const("#{described_class}::MAX_CHARS", 5000) } # Example values below are relative to this baseline
 
     it 'does not add errors onto remote statuses' do
       status = instance_double(Status, local?: false)
@@ -25,19 +25,19 @@ RSpec.describe StatusLengthValidator do
     end
 
     it 'adds an error when content warning is over character limit' do
-      status = status_double(spoiler_text: 'a' * 520)
+      status = status_double(spoiler_text: 'a' * 5020)
       subject.validate(status)
       expect(status.errors).to have_received(:add)
     end
 
     it 'adds an error when text is over character limit' do
-      status = status_double(text: 'a' * 520)
+      status = status_double(text: 'a' * 5020)
       subject.validate(status)
       expect(status.errors).to have_received(:add)
     end
 
     it 'adds an error when text and content warning are over character limit total' do
-      status = status_double(spoiler_text: 'a' * 250, text: 'b' * 251)
+      status = status_double(spoiler_text: 'a' * 2500, text: 'b' * 2501)
       subject.validate(status)
       expect(status.errors).to have_received(:add)
     end
